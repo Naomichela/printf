@@ -1,0 +1,49 @@
+#include <stdarg.h>
+#include <unistd.h>
+
+void print_binary(unsigned int num)
+{
+    if (num > 1) {
+        print_binary(num >> 1); // Recursively shift the number right
+    }
+    putchar((num & 1) ? '1' : '0'); // Print the least significant bit
+}
+
+int _printf(const char *format, ...)
+{
+    va_list args;
+    int printed_chars = 0;
+
+    va_start(args, format);
+
+    while (*format)
+    {
+        if (*format != '%')
+        {
+            putchar(*format);
+            printed_chars++;
+        }
+        else
+        {
+            format++; // Move past '%'
+            if (*format == 'b')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                print_binary(num);
+                printed_chars += /* Calculate the number of characters printed */;
+            }
+            else if (*format == '%')
+            {
+                putchar('%');
+                printed_chars++;
+            }
+        }
+
+        format++; // Move to the next character in the format string
+    }
+
+    va_end(args);
+
+    return printed_chars;
+}
+
